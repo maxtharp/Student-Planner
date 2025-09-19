@@ -1,3 +1,5 @@
+package model;
+
 public class Section {
     public final String id;
     public final String code;

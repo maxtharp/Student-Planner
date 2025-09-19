@@ -1,3 +1,5 @@
+package model;
+
 public class Planned {
     public final String id;
     public final String stID;

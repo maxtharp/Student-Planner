@@ -1,3 +1,5 @@
+package model;
+
 public class Offering {
     public final String id;
     public final String code;

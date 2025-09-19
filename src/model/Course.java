@@ -1,3 +1,5 @@
+package model;
+
 public class Course {
     public final String id;
     public final String department;
