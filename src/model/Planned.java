@@ -1,25 +1,25 @@
 package model;
 
 public class Planned {
-    public final String id;
+    public final String crsID;
     public final String stID;
     public final String sem;
 
-    public Planned (String id, String stID, String sem) {
-        this.id = id;
+    public Planned(String crsID, String stID, String sem) {
+        this.crsID = crsID;
         this.stID = stID;
         this.sem = sem;
     }
 
-    public String getID () {
-        return id;
+    public String getCrsID() {
+        return crsID;
     }
 
-    public String getStID () {
+    public String getStID() {
         return stID;
     }
-
-    public String getSem (){
+    public String getSem() {
         return sem;
     }
 }
+

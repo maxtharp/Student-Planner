@@ -1,36 +1,41 @@
 package model;
 
 public class Course {
-    public final String id;
-    public final String department;
-    public final String number;
+    public final String crsID;
+    public final String departmentCode;
+    public final String crsNumber;
     public final String title;
-    public final int credits;
+    public final int minHours;
+    public final int maxHours;
 
-    public Course (String id, String department,
-                   String number, String title, int credits) {
-        this.id = id;
-        this.department = department;
-        this.number = number;
+    public Course (String crsID, String departmentCode,
+                   String crsNumber, String title, int minHours, int maxHours) {
+        this.crsID = crsID;
+        this.departmentCode = departmentCode;
+        this.crsNumber = crsNumber;
         this.title = title;
-        this.credits = credits;
+        this.minHours = minHours;
+        this.maxHours = maxHours;
     }
 
-    public String getId() {
-        return id;
+    public String getCrsID() {
+        return crsID;
     }
-    public String getDepartment() {
-        return department;
+    public String getDepartmentCode() {
+        return departmentCode;
     }
 
-    public String getNumber() {
-        return number;
+    public String getCrsNumber() {
+        return crsNumber;
     }
     public String getTitle() {
         return title;
     }
-    public int getCredits() {
-        return credits;
+    public int getMinHours() {
+        return minHours;
+    }
+    public int getMaxHours() {
+        return maxHours;
     }
 }
 

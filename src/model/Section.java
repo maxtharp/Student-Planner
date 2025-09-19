@@ -27,4 +27,7 @@ public class Section {
     public int getSecNum() {
         return secNum;
     }
+    public String getSem() {
+        return sem;
+    }
 }

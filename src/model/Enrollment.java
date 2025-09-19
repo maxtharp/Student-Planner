@@ -1,19 +1,20 @@
 package model;
 
 public class Enrollment {
-    public final String stID;
-    public final String secID;
 
-    public Enrollment (String stID, String secID) {
+    private final String stdID;
+    private final String secID;
+
+    public Enrollment(String stdID, String secID) {
+        this.stdID = stdID;
         this.secID = secID;
-        this.stID = stID;
-    }
-
-    public String getStID () {
-        return stID;
     }
 
     public String getSecID() {
         return secID;
+    }
+
+    public String getStdID() {
+        return stdID;
     }
 }
