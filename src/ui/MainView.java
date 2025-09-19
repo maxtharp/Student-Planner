@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.*;
-import model.StudentService;
+import controller.StudentService;
 
 import java.util.List;
 import java.util.Map;

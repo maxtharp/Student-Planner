@@ -9,7 +9,7 @@ public class DataLoader {
     public List<Student> loadStudents(String path) {
         List<Student> students = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine(); // skip header
+            br.readLine(); // Skip header
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
@@ -28,7 +28,7 @@ public class DataLoader {
     public List<Course> loadCourses(String path) {
         List<Course> courses = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine(); // skip header
+            br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
@@ -48,7 +48,7 @@ public class DataLoader {
     public List<Planned> loadPlanned(String path) {
         List<Planned> planned = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine(); // skip header
+            br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
@@ -65,7 +65,7 @@ public class DataLoader {
     public List<Offering> loadOffering(String path) {
         List<Offering> offerings = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine(); // skip header
+            br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
@@ -82,7 +82,7 @@ public class DataLoader {
     public List<Section> LoadSection(String path) {
         List<Section> sections = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine(); // skip header
+            br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
@@ -102,7 +102,7 @@ public class DataLoader {
     public List<Enrollment> LoadEnrollment(String path) {
         List<Enrollment> enrollments = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine(); // skip header
+            br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
