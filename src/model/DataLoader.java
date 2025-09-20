@@ -69,8 +69,8 @@ public class DataLoader {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
-                String crsID = tokens[0].replace("'", "").trim();
-                String code = tokens[1].replace("'", "").trim();
+                String crsID = tokens[0].replace("''", "").trim();
+                String code = tokens[1].replace("''", "").trim();
                 offerings.add(new Offering(crsID, code));
             }
         } catch (Exception e) {
