@@ -3,6 +3,7 @@ package ui;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -73,10 +74,58 @@ public class MainView extends Application {
     private void updateSemesterViewer(Map<String, List<String>> schedule) {
         semesterViewerBox.getChildren().clear();
         schedule.forEach((semester, courses) -> {
-            ListView<String> courseList = new ListView<>();
-            courseList.getItems().addAll(courses);
-            TitledPane pane = new TitledPane(semester, courseList);
+            boolean editable = true; // TODO: Decide if this term is editable
+            Node pane = createSemesterPane(semester, courses, editable);
             semesterViewerBox.getChildren().add(pane);
         });
+    }
+    private Node createSemesterPane(String semester, List<String> courses, boolean editable) {
+        VBox box = new VBox(5);
+        box.setPadding(new Insets(10));
+
+        Label title = new Label(semester);
+        title.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        ListView<String> courseList = new ListView<>();
+        courseList.getItems().addAll(courses);
+
+        if (!editable) {
+            courseList.setDisable(true); // past semesters locked
+        } else {
+            // ComboBox to select a new course
+            ComboBox<String> coursePicker = new ComboBox<>();
+            //coursePicker.getItems().addAll(getAllCourseKeys()); // e.g., "CS 101", "MATH 220"
+
+            final HBox controls = gethBox(coursePicker, courseList);
+            box.getChildren().addAll(title, courseList, controls);
+        }
+
+        if (!editable) {
+            box.getChildren().addAll(title, courseList);
+        }
+
+        return box;
+    }
+
+    private static HBox gethBox(ComboBox<String> coursePicker, ListView<String> courseList) {
+        Button addButton = new Button("Add");
+        addButton.setOnAction(e -> {
+            String selected = coursePicker.getValue();
+            if (selected != null && !courseList.getItems().contains(selected)) {
+                courseList.getItems().add(selected);
+
+            }
+        });
+
+        Button removeButton = new Button("Remove Selected");
+        removeButton.setOnAction(e -> {
+            String selected = courseList.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                courseList.getItems().remove(selected);
+
+            }
+        });
+
+        return new HBox(5, coursePicker, addButton, removeButton);
     }
 }
