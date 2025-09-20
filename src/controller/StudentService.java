@@ -83,8 +83,9 @@ public class StudentService {
     private int termOrder(String sem) {
         return switch (sem) {
             case "sp" -> 1;
-            case "fa" -> 2;
-            default -> 3;
+            case "su" ->2;
+            case "fa" -> 3;
+            default -> 4;
         };
     }
 }
