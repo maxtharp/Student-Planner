@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class MainView extends Application {
 
+    private final String currentSemester = "su2025";
     private StudentService service;
     private VBox semesterViewerBox;
     private TableView<String[]> conflictTable;
@@ -74,7 +75,7 @@ public class MainView extends Application {
     private void updateSemesterViewer(Map<String, List<String>> schedule) {
         semesterViewerBox.getChildren().clear();
         schedule.forEach((semester, courses) -> {
-            boolean editable = true; // TODO: Decide if this term is editable
+            boolean editable = isPastSemester(semester); // TODO: Decide if this term is editable
             Node pane = createSemesterPane(semester, courses, editable);
             semesterViewerBox.getChildren().add(pane);
         });
@@ -91,7 +92,8 @@ public class MainView extends Application {
 
         if (!editable) {
             courseList.setDisable(true); // past semesters locked
-        } else {
+        }
+        else {
             // ComboBox to select a new course
             ComboBox<String> coursePicker = new ComboBox<>();
             //coursePicker.getItems().addAll(getAllCourseKeys()); // e.g., "CS 101", "MATH 220"
@@ -103,7 +105,6 @@ public class MainView extends Application {
         if (!editable) {
             box.getChildren().addAll(title, courseList);
         }
-
         return box;
     }
 
@@ -113,7 +114,6 @@ public class MainView extends Application {
             String selected = coursePicker.getValue();
             if (selected != null && !courseList.getItems().contains(selected)) {
                 courseList.getItems().add(selected);
-
             }
         });
 
@@ -122,10 +122,29 @@ public class MainView extends Application {
             String selected = courseList.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 courseList.getItems().remove(selected);
-
             }
         });
 
         return new HBox(5, coursePicker, addButton, removeButton);
+    }
+
+    private boolean isPastSemester(String chosenSemester) {
+        return semesterOrder(chosenSemester) > semesterOrder(currentSemester);
+    }
+
+    private int semesterOrder(String code) {
+        // Expected format: "sp2025", "su2025", "fa2024"
+        code = code.toLowerCase().trim();
+
+        int year = Integer.parseInt(code.replaceAll("\\D+", ""));
+        int termWeight;
+
+        if (code.startsWith("sp")) termWeight = 1;
+        else if (code.startsWith("su")) termWeight = 2;
+        else if (code.startsWith("fa")) termWeight = 3;
+        else termWeight = 0;
+
+        // Encode into a comparable integer
+        return year * 10 + termWeight;
     }
 }
