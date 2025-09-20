@@ -42,6 +42,8 @@ public class MainView extends Application {
         semesterViewerBox.setPadding(new Insets(15));
         Tab semesterTab = new Tab("Semester Viewer", new ScrollPane(semesterViewerBox));
 
+
+        // Conflict table placeholder
         conflictTable = new TableView<>();
         conflictTable.setPlaceholder(new Label("Select a semester to view conflicts"));
         Tab conflictTab = new Tab("Conflict Chart", conflictTable);
@@ -72,10 +74,12 @@ public class MainView extends Application {
         stage.show();
     }
 
+
+    //
     private void updateSemesterViewer(Map<String, List<String>> schedule) {
         semesterViewerBox.getChildren().clear();
         schedule.forEach((semester, courses) -> {
-            boolean editable = isPastSemester(semester); // TODO: Decide if this term is editable
+            boolean editable = isPastSemester(semester);
             Node pane = createSemesterPane(semester, courses, editable);
             semesterViewerBox.getChildren().add(pane);
         });
@@ -96,7 +100,7 @@ public class MainView extends Application {
         else {
             // ComboBox to select a new course
             ComboBox<String> coursePicker = new ComboBox<>();
-            //coursePicker.getItems().addAll(getAllCourseKeys()); // e.g., "CS 101", "MATH 220"
+            coursePicker.getItems().addAll(service.getOfferedCoursesForSemester(semester)); // e.g., "CS 101", "MATH 220"
 
             final HBox controls = gethBox(coursePicker, courseList);
             box.getChildren().addAll(title, courseList, controls);
@@ -108,12 +112,13 @@ public class MainView extends Application {
         return box;
     }
 
+
     private static HBox gethBox(ComboBox<String> coursePicker, ListView<String> courseList) {
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> {
             String selected = coursePicker.getValue();
             if (selected != null && !courseList.getItems().contains(selected)) {
-                courseList.getItems().add(selected);
+                courseList.getItems().add(selected + " (planned)");
             }
         });
 
@@ -129,10 +134,10 @@ public class MainView extends Application {
     }
 
     private boolean isPastSemester(String chosenSemester) {
-        return semesterOrder(chosenSemester) > semesterOrder(currentSemester);
+        return semesterRanking(chosenSemester) > semesterRanking(currentSemester);
     }
 
-    private int semesterOrder(String code) {
+    private int semesterRanking(String code) {
         // Expected format: "sp2025", "su2025", "fa2024"
         code = code.toLowerCase().trim();
 
@@ -145,6 +150,8 @@ public class MainView extends Application {
         else termWeight = 0;
 
         // Encode into a comparable integer
+        // ex. 20253 will be ranked above 20251 since Spring is before Fall but
+        // both are in the same year
         return year * 10 + termWeight;
     }
 }
