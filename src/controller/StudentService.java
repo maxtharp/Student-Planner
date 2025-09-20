@@ -10,6 +10,7 @@ public class StudentService {
     private final List<Section> sections;
     private final List<Enrollment> enrollments;
     private final List<Planned> planned;
+    private final List<Offering> offerings;
 
     public StudentService(DataLoader loader) {
         this.students = loader.loadStudents("csv/student.csv");
@@ -17,6 +18,8 @@ public class StudentService {
         this.sections = loader.LoadSection("csv/section.csv");
         this.enrollments = loader.LoadEnrollment("csv/enrollment.csv");
         this.planned = loader.loadPlanned("csv/planned.csv");
+        this.offerings = loader.loadOffering("csv/offering.csv");
+
     }
 
     public Optional<Student> findStudentByName(String name) {
@@ -25,6 +28,7 @@ public class StudentService {
                 .findFirst();
     }
 
+    // Function to filter through specific students classes
     public Map<String, List<String>> getStudentSchedule(String studentId) {
         //Semester comparator to ensure semesters are displayed in the correct order
         Map<String, List<String>> schedule = new TreeMap<>(semesterComparator);
@@ -55,6 +59,27 @@ public class StudentService {
         return schedule;
     }
 
+    // Function to filter through available courses based on when they are offered
+    public List<String> getOfferedCoursesForSemester(String semesterCode) {
+        int year = Integer.parseInt(semesterCode.replaceAll("\\D+", ""));
+        boolean isEvenYear = year % 2 == 0;
+
+        boolean isSpring = semesterCode.startsWith("spr");
+        boolean isFall = semesterCode.startsWith("fall");
+
+        return offerings.stream()
+                .filter(off -> isOffered(off.getCode(), isSpring, isFall, isEvenYear))
+                .map(off -> {
+                    // map offering.courseId -> real course key
+                    Course c = courses.stream()
+                            .filter(course -> course.getCrsID().equals(off.getID()))
+                            .findFirst().orElse(null);
+                    return (c != null) ? (c.getDepartmentCode() + " " + c.getCrsNumber()) : null;
+                })
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
     private String buildCourseKey(String courseId) {
         return courses.stream()
                 .filter(c -> c.getCrsID().equals(courseId))
@@ -80,7 +105,7 @@ public class StudentService {
         return Integer.compare(rank1, rank2);
     };
 
-    private int termOrder(String sem) {
+    public int termOrder(String sem) {
         return switch (sem) {
             case "sp" -> 1;
             case "su" ->2;
@@ -88,4 +113,18 @@ public class StudentService {
             default -> 4;
         };
     }
+
+    private boolean isOffered(String code, boolean isSpring, boolean isFall, boolean isEvenYear) {
+        return switch (code) {
+            case "e" -> true;
+            case "sp" -> isSpring;
+            case "ef" -> isFall;
+            case "fo" -> isFall && !isEvenYear;
+            case "fe" -> isFall && isEvenYear;
+            case "so" -> isSpring && !isEvenYear;
+            case "se" -> isSpring && isEvenYear;
+            default -> false;
+        };
+    }
+
 }
